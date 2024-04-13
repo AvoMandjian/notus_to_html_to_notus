@@ -1,4 +1,5 @@
 import 'package:html/parser.dart';
+import 'package:notus_to_html_to_notus/notus_to_html_to_notus.dart';
 import 'package:zefyrka/zefyrka.dart';
 
 class HtmlToNotus {
@@ -50,6 +51,8 @@ class HtmlToNotus {
       attributes.add('u');
     } else if (node.toString().contains('<html i>')) {
       attributes.add('i');
+    } else if (node.attributes['style'] != null) {
+      attributes.add(node.attributes['style']);
     }
 
     return attributes;
@@ -60,15 +63,34 @@ class HtmlToNotus {
     for (int j = 0; j < line.nodes.length; j++) {
       LeafNode leaf = LeafNode(line.nodes[j].text);
       List<String> attributes = _getChildrenAttributes(line.nodes[j]);
-      if (attributes.contains('b')) {
-        leaf.applyAttribute(NotusAttribute.bold);
+      for (String attribute in attributes) {
+        if (attribute == 'b') {
+          leaf.applyAttribute(NotusAttribute.bold);
+        }
+        if (attribute == 'u') {
+          leaf.applyAttribute(NotusAttribute.underline);
+        }
+        if (attribute == 'i') {
+          leaf.applyAttribute(NotusAttribute.italic);
+        }
+        if (attribute.contains('background-color')) {
+          try {
+            String hexColor = attribute.split(':').last.replaceAll(';', '');
+            leaf.applyAttribute(
+                NotusAttribute.backgroundColor.fromInt(UtilFunctions.hexToInt(hexColor)));
+          } catch (e) {
+            print(e);
+          }
+        } else if (attribute.contains('color')) {
+          try {
+            String hexColor = attribute.split(':').last.replaceAll(';', '');
+            leaf.applyAttribute(NotusAttribute.color.fromInt(UtilFunctions.hexToInt(hexColor)));
+          } catch (e) {
+            print(e);
+          }
+        }
       }
-      if (attributes.contains('u')) {
-        leaf.applyAttribute(NotusAttribute.underline);
-      }
-      if (attributes.contains('i')) {
-        leaf.applyAttribute(NotusAttribute.italic);
-      }
+
       lineNode.add(leaf);
     }
     return lineNode;

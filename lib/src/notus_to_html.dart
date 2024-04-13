@@ -75,6 +75,17 @@ class NotusToHTML {
         if (notusDocLine.elementAt(i).attributes!.i == true) {
           element = '<i>' + element + '</i>';
         }
+        if (notusDocLine.elementAt(i).attributes!.color != null) {
+          String color = notusDocLine.elementAt(i).attributes!.color!;
+          element = '<span style="color:${color};">' + element + '</span>';
+        }
+        if (notusDocLine.elementAt(i).attributes!.backgroundColor != null) {
+          String backgroundColor =
+              notusDocLine.elementAt(i).attributes!.backgroundColor!;
+          element = '<span style="background-color:${backgroundColor};">' +
+              element +
+              '</span>';
+        }
         html = html + element;
       }
     }

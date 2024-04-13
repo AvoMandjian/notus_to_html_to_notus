@@ -4,14 +4,12 @@ version: 0.0.1
 homepage: https://github.com/Diana813/notus_to_html_to_notus
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
-  flutter: ">=1.17.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-
-  zefyrka: ^1.1.1
+  zefyrka: ^1.6.0
   html: ^0.15.0
 
 dev_dependencies:
