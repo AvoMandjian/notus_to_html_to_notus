@@ -22,6 +22,11 @@ class HtmlToNotus {
         line.add(LeafNode(data.nodes[i].text!.replaceAll('\n', '')));
         line.applyAttribute(NotusAttribute.h2);
         document.root.add(line);
+      } else if (data.nodes[i].toString().contains('<html h3>')) {
+        LineNode line = LineNode();
+        line.add(LeafNode(data.nodes[i].text!.replaceAll('\n', '')));
+        line.applyAttribute(NotusAttribute.h3);
+        document.root.add(line);
       } else if (data.nodes[i].toString().contains('<html p>')) {
         LineNode line = LineNode();
         line = _formatParagraph(data.nodes[i]);
