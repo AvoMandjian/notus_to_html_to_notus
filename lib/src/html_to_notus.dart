@@ -49,6 +49,8 @@ class HtmlToNotus {
       attributes.add('b');
     } else if (node.toString().contains('<html u>')) {
       attributes.add('u');
+    } else if (node.toString().contains('<html a>')) {
+      attributes.add('a_tag_href:${node.attributes['href']}');
     } else if (node.toString().contains('<html i>')) {
       attributes.add('i');
     } else if (node.attributes['style'] != null) {
@@ -67,6 +69,14 @@ class HtmlToNotus {
         if (attribute == 'b') {
           leaf.applyAttribute(NotusAttribute.bold);
         }
+        try {
+          List<String> listOfAttributes = attribute.split(':');
+          if (listOfAttributes.first == 'a_tag_href') {
+            listOfAttributes.remove('a_tag_href');
+            leaf.applyAttribute(
+                NotusAttribute.link.fromString(listOfAttributes.join()));
+          }
+        } catch (_) {}
         if (attribute == 'u') {
           leaf.applyAttribute(NotusAttribute.underline);
         }
@@ -76,15 +86,16 @@ class HtmlToNotus {
         if (attribute.contains('background-color')) {
           try {
             String hexColor = attribute.split(':').last.replaceAll(';', '');
-            leaf.applyAttribute(
-                NotusAttribute.backgroundColor.fromInt(UtilFunctions.hexToInt(hexColor)));
+            leaf.applyAttribute(NotusAttribute.backgroundColor
+                .fromInt(UtilFunctions.hexToInt(hexColor)));
           } catch (e) {
             print(e);
           }
         } else if (attribute.contains('color')) {
           try {
             String hexColor = attribute.split(':').last.replaceAll(';', '');
-            leaf.applyAttribute(NotusAttribute.color.fromInt(UtilFunctions.hexToInt(hexColor)));
+            leaf.applyAttribute(
+                NotusAttribute.color.fromInt(UtilFunctions.hexToInt(hexColor)));
           } catch (e) {
             print(e);
           }

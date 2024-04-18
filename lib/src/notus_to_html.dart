@@ -75,6 +75,11 @@ class NotusToHTML {
         if (notusDocLine.elementAt(i).attributes!.i == true) {
           element = '<i>' + element + '</i>';
         }
+        if (notusDocLine.elementAt(i).attributes!.a != null) {
+          element = '<a href=\"${notusDocLine.elementAt(i).attributes!.a!}\">' +
+              element +
+              '</a>';
+        }
         if (notusDocLine.elementAt(i).attributes!.color != null) {
           String color = notusDocLine.elementAt(i).attributes!.color!;
           element = '<span style="color:${color};">' + element + '</span>';
