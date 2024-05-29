@@ -40,6 +40,9 @@ class NotusToHTML {
       return ['<u>', '</u>'];
     } else if (notusModel.attributes!.i == true) {
       return ['<i>', '</i>'];
+    } else if (notusModel.attributes!.color is String ||
+        notusModel.attributes!.backgroundColor is String) {
+      return ['', ''];
     }
   }
 
