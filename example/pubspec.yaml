@@ -25,7 +25,11 @@ dependencies:
     sdk: flutter
   notus_to_html_to_notus:
     path: ../
-  zefyrka: ^1.6.0
+  zefyrka:
+    # path: ../forked_projects/notus_to_html_to_notus
+    git:
+      url: https://github.com/AvoMandjian/zefyrka.git
+      ref: DP
   html: ^0.15.0
 
   # The following adds the Cupertino Icons font to your application.
