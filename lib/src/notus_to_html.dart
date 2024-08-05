@@ -90,7 +90,10 @@ class NotusToHTML {
         }
         if (notusDocLine.elementAt(i).attributes!.color != null) {
           String color = notusDocLine.elementAt(i).attributes!.color!;
-          element = '<span style="color:${color};">' + element + '</span>';
+          element =
+              '<span style="color:${color}; text-decoration-color:${color};">' +
+                  element +
+                  '</span>';
         }
         if (notusDocLine.elementAt(i).attributes!.backgroundColor != null) {
           String backgroundColor =
