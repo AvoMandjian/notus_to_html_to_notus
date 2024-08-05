@@ -7,18 +7,20 @@ import 'models/notus_node.dart';
 class NotusToHTML {
   static List<NotusNode> _getJsonLine(var node) {
     String childString = jsonEncode(node.toDelta());
-    List<NotusNode> line =
-        List<NotusNode>.from(jsonDecode(childString).map((i) => NotusNode.fromJson(i)));
+    List<NotusNode> line = List<NotusNode>.from(
+        jsonDecode(childString).map((i) => NotusNode.fromJson(i)));
     return line;
   }
 
   static getHtmlFromNotus(NotusDocument notusDocument) {
     String html = '';
     for (int i = 0; i < notusDocument.root.children.length; i++) {
-      List<NotusNode> notusDocLine = _getJsonLine(notusDocument.root.children.elementAt(i));
+      List<NotusNode> notusDocLine =
+          _getJsonLine(notusDocument.root.children.elementAt(i));
       if (notusDocument.root.children.elementAt(i).runtimeType == LineNode) {
         html = html + _decodeNotusLine(notusDocLine);
-      } else if (notusDocument.root.children.elementAt(i).runtimeType == BlockNode) {
+      } else if (notusDocument.root.children.elementAt(i).runtimeType ==
+          BlockNode) {
         html = html + _decodeNotusBlock(notusDocLine);
       }
     }
@@ -56,7 +58,8 @@ class NotusToHTML {
 
   static _decodeNotusLine(List<NotusNode> notusDocLine) {
     String html = '';
-    List<String> attributes = _getLineAttributes(notusDocLine.elementAt(notusDocLine.length - 1));
+    List<String> attributes =
+        _getLineAttributes(notusDocLine.elementAt(notusDocLine.length - 1));
     html = attributes[0] + _decodeLineChildren(notusDocLine) + attributes[1];
     return html;
   }
@@ -68,25 +71,33 @@ class NotusToHTML {
         html = html + notusDocLine.elementAt(i).insert!;
       } else {
         String element = notusDocLine.elementAt(i).insert!;
+        String color = notusDocLine.elementAt(i).attributes!.color!;
         if (notusDocLine.elementAt(i).attributes!.b == true) {
-          element = '<b>' + element + '</b>';
+          element = '<b style="color:${color};">' + element + '</b>';
         }
         if (notusDocLine.elementAt(i).attributes!.u == true) {
-          element = '<u>' + element + '</u>';
+          String color = notusDocLine.elementAt(i).attributes!.color!;
+          element = '<u style="color:${color};">' + element + '</u>';
         }
         if (notusDocLine.elementAt(i).attributes!.i == true) {
-          element = '<i>' + element + '</i>';
+          element = '<i style="color:${color};">' + element + '</i>';
         }
         if (notusDocLine.elementAt(i).attributes!.a != null) {
-          element = '<a href=\"${notusDocLine.elementAt(i).attributes!.a!}\">' + element + '</a>';
+          element =
+              '<a style="color:${color};" href=\"${notusDocLine.elementAt(i).attributes!.a!}\">' +
+                  element +
+                  '</a>';
         }
         if (notusDocLine.elementAt(i).attributes!.color != null) {
           String color = notusDocLine.elementAt(i).attributes!.color!;
           element = '<span style="color:${color};">' + element + '</span>';
         }
         if (notusDocLine.elementAt(i).attributes!.backgroundColor != null) {
-          String backgroundColor = notusDocLine.elementAt(i).attributes!.backgroundColor!;
-          element = '<span style="background-color:${backgroundColor};">' + element + '</span>';
+          String backgroundColor =
+              notusDocLine.elementAt(i).attributes!.backgroundColor!;
+          element = '<span style="background-color:${backgroundColor};">' +
+              element +
+              '</span>';
         }
         html = html + element;
       }
@@ -99,10 +110,13 @@ class NotusToHTML {
     String childrenHtml = '';
     List<List<NotusNode>> blockLinesList = _splitBlockIntoLines(notusDocLine);
 
-    List<String> attributes = _getBlockAttributes(notusDocLine.elementAt(notusDocLine.length - 1));
+    List<String> attributes =
+        _getBlockAttributes(notusDocLine.elementAt(notusDocLine.length - 1));
     for (int i = 0; i < blockLinesList.length; i++) {
-      childrenHtml =
-          childrenHtml + '<li>' + _decodeLineChildren(blockLinesList.elementAt(i)) + '</li>';
+      childrenHtml = childrenHtml +
+          '<li>' +
+          _decodeLineChildren(blockLinesList.elementAt(i)) +
+          '</li>';
     }
 
     html = attributes[0] + childrenHtml + attributes[1];
@@ -121,14 +135,16 @@ class NotusToHTML {
 
     for (int i = 0; i < sublistBreakPoints.length; i++) {
       if (i == 0) {
-        blockLinesList.add(notusDocLine.sublist(i, sublistBreakPoints.elementAt(i)));
+        blockLinesList
+            .add(notusDocLine.sublist(i, sublistBreakPoints.elementAt(i)));
       } else {
         if (i < sublistBreakPoints.length - 1) {
           blockLinesList.add(notusDocLine.sublist(
-              sublistBreakPoints.elementAt(i - 1), sublistBreakPoints.elementAt(i)));
+              sublistBreakPoints.elementAt(i - 1),
+              sublistBreakPoints.elementAt(i)));
         } else {
-          blockLinesList.add(
-              notusDocLine.sublist(sublistBreakPoints.elementAt(i - 1), notusDocLine.length - 1));
+          blockLinesList.add(notusDocLine.sublist(
+              sublistBreakPoints.elementAt(i - 1), notusDocLine.length - 1));
         }
       }
     }
