@@ -22,6 +22,7 @@ class Attributes {
   bool? b = false;
   bool? i = false;
   bool? u = false;
+  bool? s = false;
   String? a;
   String? color;
   String? backgroundColor;
@@ -35,6 +36,7 @@ class Attributes {
     this.b,
     this.i,
     this.u,
+    this.s,
     this.a,
     this.color,
     this.backgroundColor,
@@ -47,6 +49,7 @@ class Attributes {
       b: json['b'],
       i: json['i'],
       u: json['u'],
+      s: json['s'],
       a: json['a'],
       color: UtilFunctions.intToHex(json['color']),
       backgroundColor: UtilFunctions.intToHex(json['background-color']),
@@ -60,6 +63,7 @@ class Attributes {
       'b': b,
       'i': i,
       'u': u,
+      's': s,
       'a': a,
       'color': color,
       'background-color': backgroundColor,
