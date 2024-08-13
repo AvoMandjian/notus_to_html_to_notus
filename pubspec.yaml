@@ -11,11 +11,11 @@ dependencies:
   flutter:
     sdk: flutter
   zefyrka:
-    # path: ../forked_projects/notus_to_html_to_notus
+    # path: ../zefyrka
     git:
       url: https://github.com/AvoMandjian/zefyrka.git
       ref: DP
-  html: ^0.15.0
+  html: ^0.15.4
 
 dev_dependencies:
   flutter_test:

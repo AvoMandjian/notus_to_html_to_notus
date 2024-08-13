@@ -28,7 +28,9 @@ class NotusToHTML {
   }
 
   static _getLineAttributes(NotusNode notusModel) {
-    if (notusModel.attributes == null) {
+    if (notusModel.attributes == null ||
+        notusModel.attributes!.color is String ||
+        notusModel.attributes!.backgroundColor is String) {
       return ['<p>', '</p>'];
     } else if (notusModel.attributes!.heading == 1) {
       return ['<h1>', '</h1>'];
@@ -44,10 +46,18 @@ class NotusToHTML {
       return ['<u>', '</u>'];
     } else if (notusModel.attributes!.i == true) {
       return ['<i>', '</i>'];
-    } else if (notusModel.attributes!.color is String ||
-        notusModel.attributes!.backgroundColor is String) {
-      return ['', ''];
     }
+    //  else if (notusModel.attributes!.color is String) {
+    //   return [
+    //     '<p style="color:${notusModel.attributes!.color}; text-decoration-color:${notusModel.attributes!.color};">',
+    //     '</p>'
+    //   ];
+    // } else if (notusModel.attributes!.backgroundColor is String) {
+    //   return [
+    //     '<p style="background-color:${notusModel.attributes!.backgroundColor};">',
+    //     '</p>'
+    //   ];
+    // }
   }
 
   static _getBlockAttributes(NotusNode notusModel) {
@@ -73,7 +83,20 @@ class NotusToHTML {
         html = html + notusDocLine.elementAt(i).insert!;
       } else {
         String element = notusDocLine.elementAt(i).insert!;
-        String color = notusDocLine.elementAt(i).attributes!.color!;
+        String? color = notusDocLine.elementAt(i).attributes?.color;
+        String? backgroundColor =
+            notusDocLine.elementAt(i).attributes?.backgroundColor;
+        if (color != null) {
+          element =
+              '<span style="color:${color}; text-decoration-color:${color};">' +
+                  element +
+                  '</span>';
+        }
+        if (backgroundColor != null) {
+          element = '<span style="background-color:${backgroundColor};">' +
+              element +
+              '</span>';
+        }
         if (notusDocLine.elementAt(i).attributes!.b == true) {
           element = '<b>' + element + '</b>';
         }
@@ -81,30 +104,10 @@ class NotusToHTML {
           element = '<s>' + element + '</s>';
         }
         if (notusDocLine.elementAt(i).attributes!.u == true) {
-          String color = notusDocLine.elementAt(i).attributes!.color!;
           element = '<u>' + element + '</u>';
         }
         if (notusDocLine.elementAt(i).attributes!.i == true) {
           element = '<i>' + element + '</i>';
-        }
-        if (notusDocLine.elementAt(i).attributes!.a != null) {
-          element = '<a href=\"${notusDocLine.elementAt(i).attributes!.a!}\">' +
-              element +
-              '</a>';
-        }
-        if (notusDocLine.elementAt(i).attributes!.color != null) {
-          String color = notusDocLine.elementAt(i).attributes!.color!;
-          element =
-              '<span style="color:${color}; text-decoration-color:${color};">' +
-                  element +
-                  '</span>';
-        }
-        if (notusDocLine.elementAt(i).attributes!.backgroundColor != null) {
-          String backgroundColor =
-              notusDocLine.elementAt(i).attributes!.backgroundColor!;
-          element = '<span style="background-color:${backgroundColor};">' +
-              element +
-              '</span>';
         }
         html = html + element;
       }
